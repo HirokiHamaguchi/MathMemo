@@ -1,2 +1,3 @@
 # MathMemo
-Personal Memo about mathematics
+
+A collection of mathematical notes and memos.

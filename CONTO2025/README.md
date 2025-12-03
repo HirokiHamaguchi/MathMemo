@@ -1,5 +1,11 @@
 # CONTO2025
 
+Cones: Theory and Optimization
+
+December 1st-3rd, 2025
+
+https://sites.google.com/view/conto2025
+
 ## Takayuki Okuno
 
 [A Survey of Numerical Methods for Nonlinear Semidefinite Programming](https://orsj.org/wp-content/or-archives50/pdf/e_mag/Vol.58_01_024.pdf)
