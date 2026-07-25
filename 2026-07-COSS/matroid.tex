@@ -1,0 +1,246 @@
+% !LW recipe=uplatex
+
+\documentclass[a4paper, 11pt, dvipdfmx]{jsarticle}
+
+\usepackage[margin=25mm]{geometry}
+\usepackage{mathtools, amssymb}
+\usepackage{amsthm}
+\usepackage[numbers]{natbib}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+\newtheorem{theorem}{定理}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{定義}
+\renewcommand{\proofname}{証明}
+\crefname{theorem}{定理}{定理}
+\crefname{definition}{定義}{定義}
+\crefname{equation}{式}{式}
+
+\title{マトロイド}
+\author{COSS 2026-07}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{定義}
+\label{sec:matroid-definition}
+
+\begin{definition}[マトロイド]
+\label{def:matroid}
+有限集合 $E$ と集合族 $\mathcal{I} \subseteq 2^E$ の組 $M = (E, \mathcal{I})$ で、次を満たすもの:
+\begin{enumerate}
+  \item 空集合: $\varnothing \in \mathcal{I}$
+  \item 遺伝性: $I \in \mathcal{I},\ J \subseteq I \Longrightarrow J \in \mathcal{I}$
+  \item 増大性: $I, J \in \mathcal{I},\ \lvert I \rvert < \lvert J \rvert \Longrightarrow \exists e \in J \setminus I,\ I \cup \{e\} \in \mathcal{I}$
+\end{enumerate}
+\end{definition}
+
+\begin{itemize}
+  \item $E$: 台集合
+  \item $\mathcal{I}$: 独立集合族
+  \item $\mathcal{B}(M)$: 包含関係に関して極大な独立集合（基）の全体
+  \item 階数関数: $r_M(X) = \max\{\lvert I \rvert : I \subseteq X,\ I \in \mathcal{I}\}$
+\end{itemize}
+
+\section{マトロイドの例}
+\label{sec:matroid-examples}
+
+\subsection[一様マトロイド]{一様マトロイド~\citep{s1}}
+\label{sec:uniform-matroid}
+
+\begin{itemize}
+  \item パラメータ:$0 \leq r \leq \lvert E \rvert$。
+  \item 定義:$U_{r, \lvert E \rvert} = (E, \mathcal{I})$、$\mathcal{I} = \{I \subseteq E : \lvert I \rvert \leq r\}$。
+\end{itemize}
+
+\subsection[分割マトロイド]{分割マトロイド~\citep{s2}}
+\label{sec:partition-matroid}
+
+\begin{itemize}
+  \item 分割:$E = \biguplus_{i=1}^m E_i$。
+  \item 容量:$0 \leq k_i \leq \lvert E_i \rvert$。
+  \item 定義:$M = (E, \mathcal{I})$、$\mathcal{I} = \{I \subseteq E : \lvert I \cap E_i \rvert \leq k_i\ (i = 1, \ldots, m)\}$。
+\end{itemize}
+
+\subsection[Laminar Matroid]{Laminar Matroid~\citep{s3}}
+\label{sec:laminar-matroid}
+
+\begin{itemize}
+  \item Laminar 族:$\mathcal{L} \subseteq 2^E$、$A,B \in \mathcal{L} \Longrightarrow A \cap B = \varnothing$ または $A \subseteq B$ または $B \subseteq A$。
+  \item 容量関数:$c \colon \mathcal{L} \to \mathbb{Z}_{\geq 0}$。
+  \item 定義:$M(E, \mathcal{L}, c) = (E, \mathcal{I})$、$\mathcal{I} = \{I \subseteq E : \lvert I \cap A \rvert \leq c(A)\ (A \in \mathcal{L})\}$。
+\end{itemize}
+
+\subsection[グラフ的マトロイド]{グラフ的マトロイド~\citep{s4}}
+\label{sec:graphic-matroid}
+
+\begin{itemize}
+  \item グラフ:$G = (V, E)$。
+  \item 定義:$M(G) = (E, \mathcal{I})$、$\mathcal{I} = \{F \subseteq E : (V, F) \text{ は非巡回}\}$。
+  \item 同値条件:$F \in \mathcal{I} \Longleftrightarrow F$ は森。
+\end{itemize}
+
+\subsection[横断マトロイド]{横断マトロイド~\citep{s5}}
+\label{sec:transversal-matroid}
+
+\begin{itemize}
+  \item 集合系:$\mathcal{A} = (A_1, \ldots, A_m)$、$A_i \subseteq E$。
+  \item 定義:$M[\mathcal{A}] = (E, \mathcal{I})$、$\mathcal{I} = \{I \subseteq E : \exists \text{ 単射 } \varphi \colon I \to \{1, \ldots, m\},\ e \in A_{\varphi(e)}\ (e \in I)\}$。
+  \item 二部グラフ表示:$B = (E, \{1, \ldots, m\}; D)$、$(e, i) \in D \Longleftrightarrow e \in A_i$、$I \in \mathcal{I} \Longleftrightarrow B$ に $I$ を飽和するマッチングが存在。
+\end{itemize}
+
+\subsection[Gammoid]{Gammoid~\citep{s6}}
+\label{sec:gammoid}
+
+\begin{itemize}
+  \item 有向グラフ:$D = (V, A)$。
+  \item 始点集合・台集合:$S \subseteq V$、$E \subseteq V$。
+  \item $s(P),t(P)$:有向路 $P$ の始点・終点。
+  \item 定義:$\Gamma(D, S, E) = (E, \mathcal{I})$、$I \in \mathcal{I} \Longleftrightarrow \exists \{P_i\}_{i \in I},\ s(P_i) \in S,\ t(P_i) = i,\ V(P_i) \cap V(P_j) = \varnothing\ (i \neq j)$。
+  \item Strict gammoid:$E = V$。
+\end{itemize}
+
+\subsection[正則マトロイド]{正則マトロイド~\citep{s7}}
+\label{sec:regular-matroid}
+
+\begin{itemize}
+  \item 定義:$M$ は正則 $\Longleftrightarrow \forall \text{ 体 } \mathbb{F},\ \exists A_{\mathbb{F}} \in \mathbb{F}^{r \times E},\ I \in \mathcal{I} \Longleftrightarrow \operatorname{rank}_{\mathbb{F}}((A_{\mathbb{F}})_{\ast I}) = \lvert I \rvert$。
+  \item 同値な特徴付け:$M$ は正則 $\Longleftrightarrow \exists \text{ 完全単模行列 } A \in \mathbb{Z}^{r \times E},\ M = M[A]$。
+  \item 完全単模性:任意の正方部分行列 $B$ に対して $\det B \in \{-1, 0, 1\}$。
+\end{itemize}
+
+\subsection[線形マトロイド]{線形マトロイド~\citep{s8}}
+\label{sec:linear-matroid}
+
+\begin{itemize}
+  \item 体・行列:$\mathbb{F}$、$A = (v_e)_{e \in E} \in \mathbb{F}^{r \times E}$。
+  \item 定義:$M_{\mathbb{F}}[A] = (E, \mathcal{I})$、$\mathcal{I} = \{I \subseteq E : \{v_e : e \in I\} \text{ は } \mathbb{F} \text{ 上線形独立}\}$。
+  \item 同値条件:$I \in \mathcal{I} \Longleftrightarrow \operatorname{rank}_{\mathbb{F}}(A_{\ast I}) = \lvert I \rvert$。
+\end{itemize}
+
+\section{基と交換性}
+\label{sec:bases-and-exchange}
+
+\begin{theorem}[基の濃度]
+\label{thm:bases-equal-size}
+\begin{equation*}
+  B_1, B_2 \in \mathcal{B}(M)
+  \Longrightarrow
+  \lvert B_1 \rvert = \lvert B_2 \rvert.
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+\begin{itemize}
+  \item 背理法: $\lvert B_1 \rvert < \lvert B_2 \rvert$ と仮定
+  \item 増大性: $\exists e \in B_2 \setminus B_1,\qquad B_1 \cup \{e\} \in \mathcal{I}$
+  \item $B_1$ の極大性に矛盾
+  \item 添字交換:$\lvert B_2 \rvert < \lvert B_1 \rvert$ も不可能
+  \item 結論:$\lvert B_1 \rvert = \lvert B_2 \rvert$
+\end{itemize}
+\end{proof}
+
+以下、集合の交換を
+\begin{equation*}
+  B - X + Y \coloneqq (B \setminus X) \cup Y
+\end{equation*}
+と略記し、一元集合の波括弧を省略する。
+
+\begin{theorem}[基交換性]
+\label{thm:basis-exchange}
+\begin{equation*}
+  \forall B_1, B_2 \in \mathcal{B}(M),\
+  \forall x \in B_1 \setminus B_2,\
+  \exists y \in B_2 \setminus B_1,\
+  B_1 - x + y \in \mathcal{B}(M).
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+\begin{align*}
+  B_1 - x &\in \mathcal{I}, \\
+  \lvert B_1 - x \rvert &= r-1 < r = \lvert B_2 \rvert.
+\end{align*}
+\begin{itemize}
+  \item 増大性:$\exists y \in B_2 \setminus (B_1 - x)$、$B_1 - x + y \in \mathcal{I}$。
+  \item $x \notin B_2$:$y \in B_2 \setminus B_1$。
+  \item $\lvert B_1 - x + y \rvert = r$ と \cref{thm:bases-equal-size}:$B_1 - x + y \in \mathcal{B}(M)$。
+\end{itemize}
+\end{proof}
+
+\begin{theorem}[同時交換性]
+\label{thm:symmetric-basis-exchange}
+\begin{equation*}
+  \forall B_1, B_2 \in \mathcal{B}(M),\
+  \forall x \in B_1 \setminus B_2,\
+  \exists y \in B_2 \setminus B_1,\
+  \begin{cases}
+    B_1 - x + y \in \mathcal{B}(M), \\
+    B_2 - y + x \in \mathcal{B}(M).
+  \end{cases}
+\end{equation*}
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+  \item \cref{thm:multiple-symmetric-basis-exchange} に $X = \{x\}$ を適用。
+  \item $\lvert Y \rvert = \lvert X \rvert = 1$:$Y = \{y\}$。
+  \item $B_1 - x + y \in \mathcal{B}(M)$:$y \notin B_1$。
+  \item $Y \subseteq B_2$:$y \in B_2 \setminus B_1$。
+  \item 結論:$B_1 - x + y,\ B_2 - y + x \in \mathcal{B}(M)$。
+\end{itemize}
+\end{proof}
+
+\begin{theorem}[多重交換性]
+\label{thm:multiple-symmetric-basis-exchange}
+\begin{equation*}
+  \forall B_1, B_2 \in \mathcal{B}(M),\
+  \forall X \subseteq B_1,\
+  \exists Y \subseteq B_2,\
+  \lvert Y \rvert = \lvert X \rvert,\
+  \begin{cases}
+    B_1 - X + Y \in \mathcal{B}(M), \\
+    B_2 - Y + X \in \mathcal{B}(M).
+  \end{cases}
+\end{equation*}
+\end{theorem}
+
+\begin{thebibliography}{S8}
+
+\bibitem[S1]{s1}
+一様マトロイド。
+\url{https://en.wikipedia.org/wiki/Uniform_matroid}
+
+\bibitem[S2]{s2}
+分割マトロイド。
+\url{https://en.wikipedia.org/wiki/Partition_matroid}
+
+\bibitem[S3]{s3}
+Laminar matroid。
+\url{https://www.sciencedirect.com/science/article/pii/S0195669817300021}
+
+\bibitem[S4]{s4}
+グラフ的マトロイド。
+\url{https://en.wikipedia.org/wiki/Graphic_matroid}
+
+\bibitem[S5]{s5}
+Transversal matroids and Hall's theorem.
+\url{https://projecteuclid.org/journals/pacific-journal-of-mathematics/volume-41/issue-3/Transversal-matroids-and-Halls-theorem/pjm/1102968140.pdf}
+
+\bibitem[S6]{s6}
+Gammoid.
+\url{https://en.wikipedia.org/wiki/Gammoid}
+
+\bibitem[S7]{s7}
+正則マトロイド。
+\url{https://en.wikipedia.org/wiki/Regular_matroid}
+
+\bibitem[S8]{s8}
+線形マトロイド／マトロイド表現。
+\url{https://math.mit.edu/~goemans/18433S13/matroid-notes.pdf}
+
+\end{thebibliography}
+
+\end{document}
